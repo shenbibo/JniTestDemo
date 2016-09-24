@@ -2,9 +2,9 @@
 #include <string>
 
 
+
 extern "C"
-jstring
-Java_com_study_sky_jnitestdemo_MainActivity_stringFromJNI(
+JNIEXPORT jstring JNICALL Java_com_study_sky_jnitestdemo_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";

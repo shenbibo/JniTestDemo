@@ -12,7 +12,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                //-fvisibility=hidden 关闭所有的符号表输出，只有使用JNIEXPORT宏的方法才导出
+                cppFlags "-std=c++11 -D__cplusplus=201103L -fvisibility=hidden"
             }
         }
 

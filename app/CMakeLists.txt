@@ -19,7 +19,13 @@ add_library( # Sets the name of the library.
              # Associated headers in the same location as their source
              # file are automatically included.
              src/main/cpp/native-lib.cpp
-             src/main/cpp/JNI_NativeTestClass.cpp)
+             src/main/cpp/JNI_NativeTestClass.cpp
+             src/main/cpp/utils.cpp
+             )
+
+# Specifies a path to native header files.
+# 注意这里指定的是头文件的目录，如果在
+# include_directories(src/main/cpp/)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by
@@ -45,6 +51,7 @@ find_library( # Sets the name of the path variable.
 #                       # included in the NDK.
 #                       ${log-lib} )
 
+## 此处添加目前仅仅是为了测试，没有任何其他作用
 add_library( app-glue
              # 以静态的方式添加
              STATIC

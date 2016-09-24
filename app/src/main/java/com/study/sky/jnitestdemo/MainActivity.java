@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import bean.NativeTestClass;
+import bean.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +22,11 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
-        NativeTestClass testClass = new NativeTestClass(123, "shenbibo");
+        NativeTestClass testClass =
+                new NativeTestClass(123, "shenbibo", new User(456, "java string name"));
         testClass.getAndSetField();
-        testClass.show();
+        testClass.getAndSetObjectField();
+        testClass.nativeShow();
     }
 
     /**
