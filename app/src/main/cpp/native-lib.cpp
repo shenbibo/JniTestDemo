@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 
+
 extern "C"
 jstring
 Java_com_study_sky_jnitestdemo_MainActivity_stringFromJNI(

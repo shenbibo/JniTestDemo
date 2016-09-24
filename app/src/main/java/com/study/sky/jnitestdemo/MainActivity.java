@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import bean.NativeTestClass;
+
 public class MainActivity extends AppCompatActivity {
 
     // Used to load the 'native-lib' library on application startup.
@@ -19,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+        NativeTestClass testClass = new NativeTestClass(123, "shenbibo");
+        testClass.getAndSetField();
+        testClass.show();
     }
 
     /**
