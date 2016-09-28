@@ -24,9 +24,19 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(stringFromJNI());
         NativeTestClass testClass =
                 new NativeTestClass(123, "shenbibo", new User(456, "java string name"));
+
+        //获取并设置对象字段
         testClass.getAndSetField();
         testClass.getAndSetObjectField();
         testClass.nativeShow();
+
+        //获取并设置Int数组字段
+        testClass.getAndSetIntArray();
+        testClass.nativeShow();
+
+        //获取并设置String数组字段
+        testClass.getAndSetStringArray(testClass.strings);
+        testClass.printString();
     }
 
     /**

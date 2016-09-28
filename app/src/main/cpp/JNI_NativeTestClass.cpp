@@ -81,7 +81,7 @@ JNIEXPORT void JNICALL Java_bean_NativeTestClass_getAndSetObjectField(JNIEnv *en
 extern "C"
 JNIEXPORT void JNICALL Java_bean_NativeTestClass_nativeShow(JNIEnv *env, jobject instance) {
 
-    LOGI(TAG, "enter the getAndSetObjectField function");
+    LOGI(TAG, "enter the nativeShow function");
     jclass clazz = env->GetObjectClass(instance);
 
     //获取java层的show方法
@@ -89,5 +89,69 @@ JNIEXPORT void JNICALL Java_bean_NativeTestClass_nativeShow(JNIEnv *env, jobject
 
     //调用show方法
     env->CallVoidMethod(instance, jmethodShow);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_bean_NativeTestClass_getAndSetIntArray(JNIEnv *env, jobject instance) {
+
+    LOGI(TAG, "enter the getAndSetIntArray function");
+    //获取class对象，使用FindClass获取
+    jclass clazz = env->FindClass("bean/NativeTestClass");
+
+    //通过反射获取int[] 字段
+    jfieldID numbersId = env->GetFieldID(clazz, "number", "[I");
+    jintArray numbersObject = (jintArray) env->GetObjectField(instance, numbersId);
+    //获取数组对象的元素
+    jint *numbers = env->GetIntArrayElements(numbersObject, NULL);
+    //获取数组的长度
+    jsize length = env->GetArrayLength(numbersObject);
+    //打印数组的值
+    LOGI(TAG, "ready to print the java int array elements in native function");
+    char* values = NULL;
+    for (int i = 0; i < length; ++i) {
+        values = new char[128];
+        sprintf(values, "number[%d] = %d", i, numbers[i]);
+        LOGI(TAG, values);
+        delete[] values;
+        //设置数组的新值，但是在调用 env->ReleaseIntArrayElements不会反应到Java层生效
+        numbers[i] = i + 100;
+    }
+
+    //显示数据
+    Java_bean_NativeTestClass_nativeShow(env, instance);
+
+    //尝试重新给number指针指向一个新的数组
+    //先删除原来分配的内存
+    delete[] numbers;
+
+    LOGI(TAG, "read to modify the java int array elements");
+    //注意此处即使使用一个大小为5的数组赋值给指向java数组的指针也只有前四个元素生效
+    //如果要修改java数组对象指向一个新的数组，则直接使用env->SetObjectField(instance, numbersId, newjintArray);
+    jint temp[] = {777, 888, 456, 884, 12347, 9999};
+    numbers = temp;
+    //注意未调用该方法前，在本地对java数组做的修改还未生效
+    env->ReleaseIntArrayElements(numbersObject, numbers, 0);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_bean_NativeTestClass_getAndSetStringArray(JNIEnv *env, jobject instance, jobjectArray strings) {
+
+    //打印对象数组的元素
+    jint length = env->GetArrayLength(strings);
+    const char *tempStr = NULL;
+    for (int i = 0; i < length; ++i) {
+        jstring str = (jstring) env->GetObjectArrayElement(strings, i);
+        tempStr = env->GetStringUTFChars(str, NULL);
+        LOGI(TAG, tempStr);
+        env->ReleaseStringUTFChars(str, tempStr);
+
+        //设置String数组对象的值
+        jstring newStr = env->NewStringUTF("newsting +++ ");
+        env->SetObjectArrayElement(strings, i, newStr);
+    }
+
 
 }
